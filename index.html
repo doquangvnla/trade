@@ -46,7 +46,12 @@
     }, 30000);
 
     function fetchData() {
-        const url = 'https://cors-anywhere.herokuapp.com/https://pixels-server.pixels.xyz/v1/marketplace/item/itm_wood?pid=6625e78954c3ca9674476554&v=171533081456456456';
+	
+		var currentTime = new Date();
+
+	// Chuyển đổi thời gian hiện tại thành timestamp (milliseconds)
+		var timestamp = currentTime.getTime();
+        const url = 'https://cors-anywhere.herokuapp.com/https://pixels-server.pixels.xyz/v1/marketplace/item/itm_wood?pid=6625e78954c3ca9674476554&v=' + timestamp;
 		//const url = 'http://localhost:3000/https://pixels-server.pixels.xyz/v1/marketplace/item/itm_wood?pid=6625e78954c3ca9674476554&v=17153308102;
         const xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
