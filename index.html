@@ -3,42 +3,91 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JSON to Table</title>
+<title>Marketplace Listings</title>
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+    th, td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+</style>
 </head>
 <body>
-<table id="jsonTable" border="1">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Owner</th>
-      <th>Price</th>
-      <th>Quantity</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
+<div id="data-container">
+    <!-- Data will be displayed here -->
+</div>
 
 <script>
-fetch('https://pixels-server.pixels.xyz/v1/marketplace/item/itm_wood?pid=66416d518d3acdcb9c02d4b4')
-  .then(response => response.json())
-  .then(data => {
-    const listings = data.listings;
-    const ownerUsernames = data.ownerUsernames;
+    setInterval(function() {
+        fetchData();
+    }, 5000);
 
-    const tableBody = document.querySelector('#jsonTable tbody');
+    function fetchData() {
+        const url = 'https://cors-anywhere.herokuapp.com/https://pixels-server.pixels.xyz/v1/marketplace/item/itm_wood?pid=66416d518d3acdcb9c02d4b4';
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    const data = JSON.parse(xhr.responseText);
+                    displayData(data);
+                } else {
+                    console.error('Error fetching data:', xhr.statusText);
+                }
+            }
+        };
+        xhr.open('GET', url, true);
+        xhr.send();
+    }
 
-    listings.forEach(listing => {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${listing._id}</td>
-        <td>${ownerUsernames[listing.ownerId]}</td>
-        <td>${listing.price}</td>
-        <td>${listing.quantity}</td>
-      `;
-      tableBody.appendChild(row);
-    });
-  })
-  .catch(error => console.error('Error:', error));
+    function displayData(data) {
+        const listings = data.listings;
+        
+        const table = document.createElement('table');
+        const headers = ['ownerId', 'price', 'quantity', 'createdAt'];
+
+        // Create table header
+        const headerRow = document.createElement('tr');
+        headers.forEach(headerText => {
+            const header = document.createElement('th');
+            header.textContent = headerText;
+            headerRow.appendChild(header);
+        });
+        table.appendChild(headerRow);
+
+        // Populate table with data
+        listings.forEach(listing => {
+            const row = document.createElement('tr');
+            headers.forEach(header => {
+                const cell = document.createElement('td');
+                if (header === 'createdAt') {
+                    // Convert timestamp to date
+                    const date = new Date(listing[header]);
+                    const formattedDate = `${padZero(date.getDate())}/${padZero(date.getMonth() + 1)}/${date.getFullYear()} ${padZero(date.getHours())}:${padZero(date.getMinutes())}:${padZero(date.getSeconds())}`;
+                    cell.textContent = formattedDate;
+                } else {
+                    cell.textContent = listing[header];
+                }
+                row.appendChild(cell);
+            });
+            table.appendChild(row);
+        });
+
+        const dataContainer = document.getElementById('data-container');
+        dataContainer.innerHTML = ''; // Clear previous data
+        dataContainer.appendChild(table);
+    }
+
+    function padZero(num) {
+        return num < 10 ? `0${num}` : num;
+    }
 </script>
 </body>
 </html>
