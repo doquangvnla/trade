@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JSON to Table</title>
+</head>
+<body>
+<table id="jsonTable" border="1">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Owner</th>
+      <th>Price</th>
+      <th>Quantity</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<script>
+fetch('https://pixels-server.pixels.xyz/v1/marketplace/item/itm_wood?pid=66416d518d3acdcb9c02d4b4')
+  .then(response => response.json())
+  .then(data => {
+    const listings = data.listings;
+    const ownerUsernames = data.ownerUsernames;
+
+    const tableBody = document.querySelector('#jsonTable tbody');
+
+    listings.forEach(listing => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${listing._id}</td>
+        <td>${ownerUsernames[listing.ownerId]}</td>
+        <td>${listing.price}</td>
+        <td>${listing.quantity}</td>
+      `;
+      tableBody.appendChild(row);
+    });
+  })
+  .catch(error => console.error('Error:', error));
+</script>
+</body>
+</html>
