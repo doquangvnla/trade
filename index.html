@@ -46,7 +46,8 @@
     }, 30000);
 
     function fetchData() {
-        const url = 'https://pixels-server.pixels.xyz/v1/marketplace/item/itm_wood?pid=6625e78954c3ca9674476554&v=1715330810296.6487';
+        const url = 'http://cors-anywhere.herokuapp.com/https://pixels-server.pixels.xyz/v1/marketplace/item/itm_wood?pid=6625e78954c3ca9674476554&v=1715330810296.6487';
+		//const url = 'http://localhost:3000/https://pixels-server.pixels.xyz/v1/marketplace/item/itm_wood?pid=6625e78954c3ca9674476554&v=1715330810296.6487';
         const xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
             if (xhr.readyState === XMLHttpRequest.DONE) {
