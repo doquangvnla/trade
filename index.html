@@ -39,11 +39,15 @@
 
 <script>
 	fetchData();
-		updateValues();
+	updateValues();
+	
     setInterval(function() {
-		fetchData();
 		updateValues();
     }, 30000);
+	
+	setInterval(function() {
+		fetchData();
+    }, 5000);
 
     function fetchData() {
 	
