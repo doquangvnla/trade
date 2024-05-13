@@ -71,9 +71,10 @@
 
     function displayData(data) {
         const listings = data.listings;
+        const ownerUsernames = data.ownerUsernames;
         
         const table = document.createElement('table');
-        const headers = ['ownerId', 'price', 'quantity', 'createdAt'];
+        const headers = ['ownerUsernames', 'price', 'quantity', 'createdAt'];
 
         // Create table header
         const headerRow = document.createElement('tr');
@@ -93,7 +94,11 @@
                     // Convert timestamp to date
                     const date = new Date(listing[header]);
                     const formattedDate = `${padZero(date.getDate())}/${padZero(date.getMonth() + 1)}/${date.getFullYear()} ${padZero(date.getHours())}:${padZero(date.getMinutes())}:${padZero(date.getSeconds())}`;
-                    cell.textContent = formattedDate + calculateRemainingTime(date);
+                    cell.textContent = formattedDate;
+                } else if (header === 'ownerUsernames') {
+                    // Get ownerUsername from ownerUsernames object based on ownerId
+                    const ownerId = listing['ownerId'];
+                    cell.textContent = ownerUsernames[ownerId];
                 } else {
                     cell.textContent = listing[header];
                 }
