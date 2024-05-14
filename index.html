@@ -140,8 +140,13 @@
 	return time_less; }
 	
 	function updateValues() {
+	
+		var currentTime = new Date();
+
+	// Chuyển đổi thời gian hiện tại thành timestamp (milliseconds)
+		var timestamp = currentTime.getTime();
         // URL chứa dữ liệu JSON
-        var url = "https://pixels-server.pixels.xyz/cache/marketplace/listings/count?v=1715571516732";
+        var url = "https://tradeserver-1.onrender.com/https://pixels-server.pixels.xyz/cache/marketplace/listings/count?v=" + timestamp;
 
         // Lấy dữ liệu JSON từ URL
         fetch(url)
