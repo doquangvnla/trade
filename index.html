@@ -5,10 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Marketplace Listings</title>
 <style>
+    body {
+        background-color: #000;
+        color: #fff;
+        font-family: Arial, sans-serif;
+    }
     table {
         width: 100%;
         border-collapse: collapse;
         margin-bottom: 20px;
+        color: #fff;
     }
     th, td {
         border: 1px solid #dddddd;
@@ -16,7 +22,13 @@
         padding: 8px;
     }
     th {
-        background-color: #f2f2f2;
+        background-color: #333;
+    }
+    .red {
+        color: red;
+    }
+    .green {
+        color: green;
     }
 </style>
 </head>
@@ -38,25 +50,21 @@
 </table>
 
 <script>
-	fetchData();
-	updateValues();
-	
+    fetchData();
+    updateValues();
+    
     setInterval(function() {
-		updateValues();
+        updateValues();
     }, 30000);
-	
-	setInterval(function() {
-		fetchData();
+    
+    setInterval(function() {
+        fetchData();
     }, 5000);
 
     function fetchData() {
-	
-		var currentTime = new Date();
-
-	// Chuyển đổi thời gian hiện tại thành timestamp (milliseconds)
-		var timestamp = currentTime.getTime();
+        var currentTime = new Date();
+        var timestamp = currentTime.getTime();
         const url = 'https://tradeserver-1.onrender.com/https://pixels-server.pixels.xyz/v1/marketplace/item/itm_wood?pid=6625e78954c3ca9674476554&v=' + timestamp;
-		//const url = 'http://localhost:3000/https://pixels-server.pixels.xyz/v1/marketplace/item/itm_wood?pid=6625e78954c3ca9674476554&v=17153308102;
         const xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
             if (xhr.readyState === XMLHttpRequest.DONE) {
@@ -72,7 +80,6 @@
         xhr.send();
     }
 
-
     function displayData(data) {
         const listings = data.listings;
         const ownerUsernames = data.ownerUsernames;
@@ -80,7 +87,6 @@
         const table = document.createElement('table');
         const headers = ['ownerUsernames', 'price', 'quantity', 'createdAt'];
 
-        // Create table header
         const headerRow = document.createElement('tr');
         headers.forEach(headerText => {
             const header = document.createElement('th');
@@ -89,18 +95,15 @@
         });
         table.appendChild(headerRow);
 
-        // Populate table with data
         listings.forEach(listing => {
             const row = document.createElement('tr');
             headers.forEach(header => {
                 const cell = document.createElement('td');
                 if (header === 'createdAt') {
-                    // Convert timestamp to date
                     const date = new Date(listing[header]);
                     const formattedDate = `${padZero(date.getDate())}/${padZero(date.getMonth() + 1)}/${date.getFullYear()} ${padZero(date.getHours())}:${padZero(date.getMinutes())}:${padZero(date.getSeconds())}`;
                     cell.textContent = formattedDate + calculateRemainingTime(date);
                 } else if (header === 'ownerUsernames') {
-                    // Get ownerUsername from ownerUsernames object based on ownerId
                     const ownerId = listing['ownerId'];
                     cell.textContent = ownerUsernames[ownerId];
                 } else {
@@ -112,74 +115,68 @@
         });
 
         const dataContainer = document.getElementById('data-container');
-        dataContainer.innerHTML = ''; // Clear previous data
+        dataContainer.innerHTML = '';
         dataContainer.appendChild(table);
     }
 
     function padZero(num) {
         return num < 10 ? `0${num}` : num;
     }
-	
-	// Hàm tính thời gian còn lại 
-	function calculateRemainingTime(targetDate) 
-	{ 
-	// Lấy thời gian hiện tại 
-	var now = new Date();  
-	// Tính thời gian còn lại (tính bằng mili giây) 
-	var timeDiff = targetDate.getTime() - now.getTime();  
-	// Chuyển đổi thời gian còn lại thành ngày, giờ, phút và giây 
-	var days = Math.floor(timeDiff / (1000 * 60 * 60 * 24))*(-1); 
-	var hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))*(-1); 
-	var minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60))*(-1); 
-	var seconds = Math.floor((timeDiff % (1000 * 60)) / 1000)*(-1);  
-	// Trả về kết quả dưới dạng đối tượng 
-	var time_less = " (còn " + days + " ngày " + hours + " giờ " + minutes + " phút " + seconds + " giây)"; 
-	if(days == 1){ time_less = " (còn " + hours + " giờ " + minutes + " phút " + seconds + " giây)"; } 
-	if(hours == 1){ time_less = " (còn " + minutes + " phút " + seconds + " giây)"; } 
-	if(minutes == 1){ time_less = " (còn " + seconds + " giây)"; } 
-	return time_less; }
-	
-	function updateValues() {
-	
-		var currentTime = new Date();
+    
+    function calculateRemainingTime(targetDate) {
+        var now = new Date();  
+        var timeDiff = targetDate.getTime() - now.getTime();  
+        var days = Math.floor(timeDiff / (1000 * 60 * 60 * 24)) * -1;
+        var hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)) * -1;
+        var minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60)) * -1;
+        var seconds = Math.floor((timeDiff % (1000 * 60)) / 1000) * -1;
+        var time_less = ` (còn ${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây)`;
+        if (days === 1) time_less = ` (còn ${hours} giờ ${minutes} phút ${seconds} giây)`;
+        if (hours === 1) time_less = ` (còn ${minutes} phút ${seconds} giây)`;
+        if (minutes === 1) time_less = ` (còn ${seconds} giây)`;
+        return time_less;
+    }
 
-	// Chuyển đổi thời gian hiện tại thành timestamp (milliseconds)
-		var timestamp = currentTime.getTime();
-        // URL chứa dữ liệu JSON
+    function updateValues() {
+        var currentTime = new Date();
+        var timestamp = currentTime.getTime();
         var url = "https://tradeserver-1.onrender.com/https://pixels-server.pixels.xyz/cache/marketplace/listings/count?v=" + timestamp;
 
-        // Lấy dữ liệu JSON từ URL
         fetch(url)
         .then(response => response.json())
         .then(data => {
-            // Lấy giá trị của cột "itm_scarrotPie"
             var itmScarrotPieValue = data["counts"]["itm_wood"];
-            
-            // Định dạng giá trị số
             var formattedValue = itmScarrotPieValue.toLocaleString('en-US');
-
-            // Lấy giá trị của "lastUpdated"
             var lastUpdatedTimestamp = data["lastUpdated"];
-
-            // Chuyển đổi thời gian sang định dạng dd/mm/yyyy hh24:mi:ss
             var lastUpdatedDate = new Date(lastUpdatedTimestamp);
             var formattedLastUpdated = lastUpdatedDate.toLocaleString('en-GB');
-
-            // Tạo một dòng mới trong bảng
-            var newRow = "<tr><td>" + formattedValue + "</td><td>" + formattedLastUpdated + "</td></tr>";
-
-            // Chèn dòng mới vào đầu bảng
             var tbody = document.getElementById("data_table_body");
-            tbody.insertAdjacentHTML("afterbegin", newRow);
+            
+            var previousValue = tbody.rows.length > 0 ? parseInt(tbody.rows[0].cells[0].textContent.replace(/,/g, '')) : null;
+            var newRow = document.createElement('tr');
+            var valueCell = document.createElement('td');
+            var timeCell = document.createElement('td');
 
-            // Kiểm tra số dòng, nếu vượt quá 10 dòng thì loại bỏ dòng cuối cùng
+            valueCell.textContent = formattedValue;
+            if (previousValue !== null) {
+                if (itmScarrotPieValue > previousValue) {
+                    valueCell.classList.add('green');
+                } else if (itmScarrotPieValue < previousValue) {
+                    valueCell.classList.add('red');
+                }
+            }
+            timeCell.textContent = formattedLastUpdated;
+            newRow.appendChild(valueCell);
+            newRow.appendChild(timeCell);
+
+            tbody.insertAdjacentElement('afterbegin', newRow);
+
             if (tbody.rows.length > 10) {
                 tbody.removeChild(tbody.lastChild);
             }
         })
         .catch(error => console.error('Error fetching data:', error));
     }
-
 </script>
 </body>
 </html>
