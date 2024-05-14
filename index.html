@@ -150,15 +150,15 @@
         var hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)) * -1;
         var minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60)) * -1;
         var seconds = Math.floor((timeDiff % (1000 * 60)) / 1000) * -1;
-        var time_less = ` (còn ${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây)`;
-        if (days === 1) time_less = ` (còn ${hours} giờ ${minutes} phút ${seconds} giây)`;
-        if (hours === 1) time_less = ` (còn ${minutes} phút ${seconds} giây)`;
-        if (minutes === 1) time_less = ` (còn ${seconds} giây)`;
+        var time_less = ` (${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây)`;
+        if (days === 1) time_less = ` (${hours} giờ ${minutes} phút ${seconds} giây)`;
+        if (hours === 1) time_less = ` (${minutes} phút ${seconds} giây)`;
+        if (minutes === 1) time_less = ` (${seconds} giây)`;
         return time_less;
     }
 
     function getPriceClass(price) {
-        const uniquePrices = ['unique-price-1', 'unique-price-2', 'unique-price-3'];
+        const uniquePrices = ['unique-price-1', 'unique-price-2', 'unique-price-3','unique-price-4','unique-price-5'];
         return uniquePrices[price % uniquePrices.length];
     }
 
