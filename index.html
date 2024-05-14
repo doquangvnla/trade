@@ -52,6 +52,9 @@
     <!-- Data will be displayed here -->
 </div>
 <hr/>
+	<button onclick="refreshData()">Refresh</button>
+	<input type="checkbox" id="autoRefreshCheckbox" onchange="toggleAutoRefresh()"> Auto Refresh
+<hr/>
 <table id="data_table">
     <thead>
         <tr>
@@ -65,16 +68,28 @@
 </table>
 
 <script>
+
+    var autoRefreshInterval;
+    var autoFetchInterval;
+
     fetchData();
     updateValues();
     
-    setInterval(function() {
-        updateValues();
-    }, 30000);
-    
-    setInterval(function() {
+    function refreshData() {
         fetchData();
-    }, 5000);
+        updateValues();
+    }
+
+    function toggleAutoRefresh() {
+        var autoRefreshCheckbox = document.getElementById("autoRefreshCheckbox");
+        if (autoRefreshCheckbox.checked) {
+            autoFetchInterval = setInterval(fetchData, 5000);
+            autoRefreshInterval = setInterval(updateValues, 30000);
+        } else {
+            clearInterval(autoFetchInterval);
+            clearInterval(autoRefreshInterval);
+        }
+    }
 
     function fetchData() {
         var currentTime = new Date();
@@ -181,15 +196,22 @@
             var newRow = document.createElement('tr');
             var valueCell = document.createElement('td');
             var timeCell = document.createElement('td');
-
-            valueCell.textContent = formattedValue;
-            if (previousValue !== null) {
+			
+			var num;
+			var check = "";
+			if (previousValue !== null) {
                 if (itmScarrotPieValue > previousValue) {
                     valueCell.classList.add('green');
+					num = itmScarrotPieValue - previousValue;
+					check = " ( + " + num.toLocaleString('en-US') + ")";
                 } else if (itmScarrotPieValue < previousValue) {
                     valueCell.classList.add('red');
+					num = previousValue -itmScarrotPieValue;
+					check = " ( - " + num.toLocaleString('en-US') + ")";
                 }
             }
+            valueCell.textContent = formattedValue + check;
+            
             timeCell.textContent = formattedLastUpdated;
             newRow.appendChild(valueCell);
             newRow.appendChild(timeCell);
