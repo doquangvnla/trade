@@ -137,7 +137,7 @@
                     const ownerId = listing['ownerId'];
                     cell.textContent = ownerUsernames[ownerId];
                 } else if (header === 'quantity') {
-                    cell.textContent = parseInt(listing[header]).toLocaleString('en-US');
+                    cell.textContent = parseInt(listing[header]- listing['claimedQuantity']).toLocaleString('en-US');
                 } else if (header === 'price') {
                     cell.textContent = listing[header];
                     cell.classList.add(getPriceClass(listing[header]));
