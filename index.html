@@ -30,6 +30,15 @@
     .green {
         color: green;
     }
+    .unique-price-1 {
+        color: #FF5733; /* Example color */
+    }
+    .unique-price-2 {
+        color: #33FF57; /* Example color */
+    }
+    .unique-price-3 {
+        color: #3357FF; /* Example color */
+    }
 </style>
 </head>
 <body>
@@ -106,6 +115,11 @@
                 } else if (header === 'ownerUsernames') {
                     const ownerId = listing['ownerId'];
                     cell.textContent = ownerUsernames[ownerId];
+                } else if (header === 'quantity') {
+                    cell.textContent = parseInt(listing[header]).toLocaleString('en-US');
+                } else if (header === 'price') {
+                    cell.textContent = listing[header];
+                    cell.classList.add(getPriceClass(listing[header]));
                 } else {
                     cell.textContent = listing[header];
                 }
@@ -135,6 +149,11 @@
         if (hours === 1) time_less = ` (còn ${minutes} phút ${seconds} giây)`;
         if (minutes === 1) time_less = ` (còn ${seconds} giây)`;
         return time_less;
+    }
+
+    function getPriceClass(price) {
+        const uniquePrices = ['unique-price-1', 'unique-price-2', 'unique-price-3'];
+        return uniquePrices[price % uniquePrices.length];
     }
 
     function updateValues() {
