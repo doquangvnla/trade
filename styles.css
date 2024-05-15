@@ -1,0 +1,40 @@
+body {
+    background-color: #000;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    color: #fff;
+}
+th, td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+th {
+    background-color: #333;
+}
+.red {
+    color: red;
+}
+.green {
+    color: green;
+}
+.unique-price-1 {
+    color: #FFD700; /* Vàng sáng */
+}
+.unique-price-2 {
+    color: #00FF00; /* Xanh lá sáng */
+}
+.unique-price-3 {
+    color: #00FFFF; /* Xanh dương sáng */
+}
+.unique-price-4 {
+    color: #FF69B4; /* Hồng sáng */
+}
+.unique-price-5 {
+    color: #FF4500; /* Cam sáng */
+}
