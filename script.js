@@ -181,13 +181,15 @@ function updateValues() {
         var num;
         var check = "";
         if (previousValue !== null) {
-            if (itmScarrotPieValue > previousValue){
-                check = "+"
-            }else if(itmScarrotPieValue < previousValue){
-                check = "-"
+            if (itmScarrotPieValue > previousValue) {
+                valueCell.classList.add('green');
+                num = itmScarrotPieValue - previousValue;
+                check = " ( + " + num.toLocaleString('en-US') + ")";
+            } else if (itmScarrotPieValue < previousValue) {
+                valueCell.classList.add('red');
+                num = previousValue - itmScarrotPieValue;
+                check = " ( - " + num.toLocaleString('en-US') + ")";
             }
-        }else{
-            num = 0;
         }
 
         valueCell.textContent = formattedValue + " " + check;
