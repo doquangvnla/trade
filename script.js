@@ -49,7 +49,7 @@ var autoFetchInterval;
 const server = 'https://trade-proxy1.vercel.app/';
 //const server = 'http://localhost:3000/';
 
-const item = new URLSearchParams(window.location.search).get('item') || 'itm_silkfiber';
+const item = new URLSearchParams(window.location.search).get('item') || 'itm_wood';
 
 fetchData();
 updateValues();
