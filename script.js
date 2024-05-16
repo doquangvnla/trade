@@ -1,5 +1,55 @@
+document.addEventListener('DOMContentLoaded', function() {
+    const dropdownBtn = document.getElementById('selected-item');
+    const dropdownContent = document.getElementById('dropdown-content');
+    const items = dropdownContent.querySelectorAll('div');
+
+    dropdownBtn.addEventListener('click', function() {
+        dropdownContent.classList.toggle('show');
+    });
+
+    items.forEach(item => {
+        item.addEventListener('click', function() {
+            const selectedHTML = item.innerHTML;
+            const selectedValue = item.getAttribute('data-value');
+            dropdownBtn.innerHTML = selectedHTML + '<span>&#9660;</span>';
+            items.forEach(i => i.classList.remove('selected'));
+            item.classList.add('selected');
+            dropdownContent.classList.remove('show');
+            
+            // Reload the page with the selected value
+            const urlParams = new URLSearchParams(window.location.search);
+            urlParams.set('item', selectedValue);
+            window.location.search = urlParams.toString();
+        });
+    });
+
+    document.addEventListener('click', function(event) {
+        if (!event.target.closest('.dropdown')) {
+            dropdownContent.classList.remove('show');
+        }
+    });
+
+    // Get the item value from the URL and set it as the current item
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedItem = urlParams.get('item');
+    if (selectedItem) {
+        items.forEach(item => {
+            if (item.getAttribute('data-value') === selectedItem) {
+                const selectedHTML = item.innerHTML;
+                dropdownBtn.innerHTML = selectedHTML + '<span>&#9660;</span>';
+                item.classList.add('selected');
+            }
+        });
+    }
+});
+
 var autoRefreshInterval;
 var autoFetchInterval;
+
+const server = 'https://trade-proxy1.vercel.app/';
+//const server = 'http://localhost:3000/';
+
+const item = new URLSearchParams(window.location.search).get('item') || 'itm_silkfiber';
 
 fetchData();
 updateValues();
@@ -23,10 +73,8 @@ function toggleAutoRefresh() {
 function fetchData() {
     var currentTime = new Date();
     var timestamp = currentTime.getTime();
-	const server = 'https://trade-proxy1.vercel.app/proxy/'  + timestamp;
-	//const server = 'http://localhost:3000/proxy/'  + timestamp;
 	
-    const url = server;
+    const url = server + 'pixels-server.pixels.xyz/v1/marketplace/item/'+ item +'?pid=6625e78954c3ca9674476554&v=' + timestamp;
     const xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         if (xhr.readyState === XMLHttpRequest.DONE) {
@@ -112,15 +160,13 @@ function getPriceClass(price) {
 function updateValues() {
     var currentTime = new Date();
     var timestamp = currentTime.getTime();
-	const server = 'https://trade-proxy1.vercel.app/proxy2/'  + timestamp;
-	//const server = 'http://localhost:3000/proxy2/'  + timestamp;
 	
-    var url = server;
+    var url = server + 'pixels-server.pixels.xyz/cache/marketplace/listings/count?v=' + timestamp;
 
     fetch(url)
     .then(response => response.json())
     .then(data => {
-        var itmScarrotPieValue = data["counts"]["itm_wood"];
+        var itmScarrotPieValue = data["counts"][item];
         var formattedValue = itmScarrotPieValue.toLocaleString('en-US');
         var lastUpdatedTimestamp = data["lastUpdated"];
         var lastUpdatedDate = new Date(lastUpdatedTimestamp);
@@ -135,27 +181,29 @@ function updateValues() {
         var num;
         var check = "";
         if (previousValue !== null) {
-            if (itmScarrotPieValue > previousValue) {
-                valueCell.classList.add('green');
-                num = itmScarrotPieValue - previousValue;
-                check = " ( + " + num.toLocaleString('en-US') + ")";
-            } else if (itmScarrotPieValue < previousValue) {
-                valueCell.classList.add('red');
-                num = previousValue - itmScarrotPieValue;
-                check = " ( - " + num.toLocaleString('en-US') + ")";
+            if (itmScarrotPieValue > previousValue){
+                check = "+"
+            }else if(itmScarrotPieValue < previousValue){
+                check = "-"
             }
+        }else{
+            num = 0;
         }
-        valueCell.textContent = formattedValue + check;
-        
+
+        valueCell.textContent = formattedValue + " " + check;
         timeCell.textContent = formattedLastUpdated;
+        
         newRow.appendChild(valueCell);
         newRow.appendChild(timeCell);
-
-        tbody.insertAdjacentElement('afterbegin', newRow);
-
-        if (tbody.rows.length > 10) {
-            tbody.removeChild(tbody.lastChild);
+        
+        tbody.insertBefore(newRow, tbody.firstChild);
+        
+        var rows = tbody.getElementsByTagName("tr");
+        if (rows.length > 10) {
+            tbody.removeChild(rows[rows.length - 1]);
         }
     })
-    .catch(error => console.error('Error fetching data:', error));
+    .catch(error => {
+        console.error('Error fetching data:', error);
+    });
 }

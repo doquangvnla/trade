@@ -1,31 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Marketplace Listings</title>
-<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace Listings</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div id="data-container">
-    <!-- Data will be displayed here -->
-</div>
-<hr/>
-<button onclick="refreshData()">Refresh</button>
-<input type="checkbox" id="autoRefreshCheckbox" onchange="toggleAutoRefresh()"> Auto Refresh
-<hr/>
-<table id="data_table">
-    <thead>
-        <tr>
-            <th>Giá trị</th>
-            <th>Thời gian cập nhật</th>
-        </tr>
-    </thead>
-    <tbody id="data_table_body">
-        <!-- Dữ liệu sẽ được chèn ở đây -->
-    </tbody>
-</table>
+    <div class="dropdown">
+        <div class="dropdown-btn" id="selected-item">
+            <img src="https://d31ss916pli4td.cloudfront.net/uploadedAssets//c05c2ddb-7af6-4c9c-98c3-d21e3b98b0ae.png?v2" alt="SoftWood">
+            SoftWood
+            <span>&#9660;</span>
+        </div>
+        <div class="dropdown-content select-hide" id="dropdown-content">
+            <div data-value="itm_wood">
+                <img src="https://d31ss916pli4td.cloudfront.net/uploadedAssets//c05c2ddb-7af6-4c9c-98c3-d21e3b98b0ae.png?v2" alt="SoftWood">
+                SoftWood
+            </div>
+            <div data-value="itm_silkfiber">
+                <img src="https://d31ss916pli4td.cloudfront.net/uploadedAssets//b9934def-e38f-4de2-9dec-de66f9d91ae9.png?v2" alt="Silk Fiber">
+                Silk Fiber
+            </div>
+            <div data-value="itm_honey">
+                <img src="https://d31ss916pli4td.cloudfront.net/uploadedAssets//6ebf6ca6-85d7-4bff-8736-95ee27012400.png?v2" alt="Honey">
+                Honey
+            </div>
+            <div data-value="itm_Iron_Ore">
+                <img src="https://d31ss916pli4td.cloudfront.net/uploadedAssets//0a364582-1fb5-4f34-bc3a-32fcf7cde1ad.png?v2" alt="Iron Ore">
+                Irone
+            </div>
+            <div data-value="itm_egg">
+                <img src="https://d31ss916pli4td.cloudfront.net/uploadedAssets//6d5dc9d5-7b80-4343-be93-b5781a6ca261.png?v2" alt="Egg">
+                Egg
+            </div>
+            <div data-value="itm_popberryFruit">
+                <img src="https://d31ss916pli4td.cloudfront.net/items/itm_popberry.png?v2" alt="Popberry">
+                Popberry
+            </div>
+        </div>
+    </div>
 
-<script src="script.js"></script>
+    <div id="data-container">
+        <!-- Data will be displayed here -->
+    </div>
+    <hr/>
+    <button onclick="refreshData()">Refresh</button>
+    <input type="checkbox" id="autoRefreshCheckbox" onchange="toggleAutoRefresh()"> Auto Refresh
+    <hr/>
+    <table id="data_table">
+        <thead>
+            <tr>
+                <th>Giá trị</th>
+                <th>Thời gian cập nhật</th>
+            </tr>
+        </thead>
+        <tbody id="data_table_body">
+            <!-- Dữ liệu sẽ được chèn ở đây -->
+        </tbody>
+    </table>
+
+    <script src="script.js"></script>
 </body>
 </html>
